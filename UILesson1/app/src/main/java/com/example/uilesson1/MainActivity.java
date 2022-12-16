@@ -58,12 +58,7 @@ public class MainActivity extends AppCompatActivity {
         TextView snBrText = snackBarView.findViewById(com.google.android.material.R.id.snackbar_text);
         snBrText.setTextColor(getResources().getColor(R.color.lime_green));
 
-        View.OnClickListener listener  = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snackbar.dismiss();
-            }
-        };
+        View.OnClickListener listener  = v1 -> snackbar.dismiss();
 
         snackbar.setAction("Hide",listener);
         snackbar.show();
