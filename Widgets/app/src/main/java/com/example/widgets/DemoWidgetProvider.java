@@ -89,6 +89,7 @@ public class DemoWidgetProvider extends AppWidgetProvider {
 
             remoteViews.setTextViewText(R.id.title_widget_text,"Title");
             remoteViews.setTextViewText(R.id.value_widget_text,String.valueOf(number));
+            remoteViews.setFloat(R.id.title_widget_text,"setTextSize",20f);
 
             Intent intent = new Intent(context,DemoWidgetProvider.class);
 

@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,40 +20,45 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<MovieItem> movieItems = new ArrayList<>();
 
     RecyclerView rc;
+    ProgressBar loader;
     RcAdapter rcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        App.getInstance().movieServices.getMovies().enqueue(new Callback<List<MovieItem>>() {
+
+        rc = findViewById(R.id.recyclerView);
+        rcAdapter = new RcAdapter(movieItems);
+        rc.setLayoutManager(new LinearLayoutManager(this));
+        rc.setAdapter(rcAdapter);
+        loader = findViewById(R.id.progress_circular);
+
+        loader.setVisibility(View.VISIBLE);
+        App.getInstance().movieService.getMovies().enqueue(new Callback<List<MovieJson>>() {
             @Override
-            public void onResponse(Call<List<MovieItem>> call, Response<List<MovieItem>> response) {
+            public void onResponse(Call<List<MovieJson>> call, Response<List<MovieJson>> response) {
                 if (response.isSuccessful()){
-                    List<MovieItem> movieList = response.body();
+                    List<MovieJson> movieJsonList = response.body();
                     movieItems.clear();
-                    for (MovieItem movie:movieList){
-                        movieItems.add(movie);
+                    for (MovieJson movieJson : movieJsonList){
+                        movieItems.add(new MovieItem(movieJson));
                     }
 
                     rc.getAdapter().notifyDataSetChanged();
+                    loader.setVisibility(View.GONE);
+                }else {
+                    if (response.code() == 500){
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<List<MovieItem>> call, Throwable t) {
+            public void onFailure(Call<List<MovieJson>> call, Throwable t) {
 
             }
         });
 
-
-
-
-        rc = findViewById(R.id.recyclerView);
-        rcAdapter = new RcAdapter(movieItems);
-
-        rc.setLayoutManager(new LinearLayoutManager(this));
-        rc.setAdapter(rcAdapter);
 
     }
 }

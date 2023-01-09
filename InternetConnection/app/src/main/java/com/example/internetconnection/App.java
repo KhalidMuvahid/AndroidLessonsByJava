@@ -7,14 +7,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
 
-    private static App instance;
-    public MovieService movieServices;
+    public MovieService movieService;
+    private  static  App instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-
         initRetrofit();
     }
 
@@ -22,16 +21,14 @@ public class App extends Application {
         return instance;
     }
 
-    private void initRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder().
-                baseUrl("https://my-json-server.typicode.com/denis-zhuravlev/json-placeholder/")
+    private void  initRetrofit(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://my-json-server.typicode.com/denis-zhuravlev/json-placeholder/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        movieServices = retrofit.create(MovieService.class);
+        movieService = retrofit.create(MovieService.class);
     }
-
-
 }
 
 

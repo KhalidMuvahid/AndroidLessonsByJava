@@ -7,5 +7,5 @@ import retrofit2.http.GET;
 
 public interface MovieService {
     @GET("movies")
-    Call<List<MovieItem>> getMovies();
+    Call<List<MovieJson>> getMovies();
 }

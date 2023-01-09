@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,21 +26,33 @@ public class RcAdapter extends RecyclerView.Adapter<RcAdapter.MovieHolder> {
     public class MovieHolder extends  RecyclerView.ViewHolder{
 
         TextView name;
-        ImageView image;
+        ImageView picassoImage;
+        ImageView glideImage;
 
         public MovieHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.movie_name);
-            image = itemView.findViewById(R.id.movie_image);
+            picassoImage = itemView.findViewById(R.id.movie_image);
+            glideImage = itemView.findViewById(R.id.movie_image2);
         }
 
         public void bind(MovieItem item){
             name.setText(item.name);
+
             Picasso.get()
                     .load(item.image)
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .fit()
+                    .centerCrop()
                     .error(R.drawable.ic_baseline_error_outline_24)
-                    .into(image);
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(picassoImage);
+
+            Glide.with(itemView.getContext())
+                    .load(item.image)
+                    .centerCrop()
+                    .error(R.drawable.ic_baseline_error_outline_24)
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .into(glideImage);
         }
     }
 
