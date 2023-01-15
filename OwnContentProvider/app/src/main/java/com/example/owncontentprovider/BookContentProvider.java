@@ -8,31 +8,28 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.widget.Toast;
 
 import com.example.owncontentprovider.data.BookDatabaseHelper;
 import com.example.owncontentprovider.data.BookTable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 public class BookContentProvider extends ContentProvider {
 
     private BookDatabaseHelper database;
-    private static final String AUTHORITY = "com.example.owncontentprovider.data";
+    private static final String AUTHORITY = "com.example.owncontentprovider";
     private static final String BASE_PATH = "books";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 
-    private static final int BOOKS = 10;
-    private static final int BOOKS_ID = 20;
+    private static final int BOOKS = 1;
+    private static final int BOOKS_ID = 2;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(AUTHORITY, BASE_PATH, BOOKS);
-        sUriMatcher.addURI(AUTHORITY, BASE_PATH, BOOKS_ID);
+        sUriMatcher.addURI(AUTHORITY, BASE_PATH + "/#", BOOKS_ID);
     }
 
 
@@ -42,9 +39,9 @@ public class BookContentProvider extends ContentProvider {
         return false;
     }
 
-    @Nullable
+
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
         checkColumns(projection);
@@ -53,8 +50,9 @@ public class BookContentProvider extends ContentProvider {
 
         int utiType = sUriMatcher.match(uri);
         switch (utiType) {
-            case BOOKS:
+            case BOOKS: {
                 break;
+            }
             case BOOKS_ID: {
                 queryBuilder.appendWhere(BookTable.COLUMN_ID + "=" + uri.getLastPathSegment());
                 break;
@@ -71,15 +69,14 @@ public class BookContentProvider extends ContentProvider {
     }
 
 
-    @Nullable
     @Override
-    public String getType(@NonNull Uri uri) {
+    public String getType(Uri uri) {
         return null;
     }
 
-    @Nullable
+
     @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+    public Uri insert(Uri uri, ContentValues values) {
 
         int uriType = sUriMatcher.match(uri);
         SQLiteDatabase sqlDB = database.getWritableDatabase();
@@ -98,7 +95,7 @@ public class BookContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
         int uriType = sUriMatcher.match(uri);
         SQLiteDatabase db = database.getWritableDatabase();
         int rowsDeleted = 0;
@@ -125,7 +122,7 @@ public class BookContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         int uriType = sUriMatcher.match(uri);
         SQLiteDatabase db = database.getWritableDatabase();
         int rowsUpdated = 0;

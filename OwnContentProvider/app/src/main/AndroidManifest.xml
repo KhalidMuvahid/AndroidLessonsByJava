@@ -28,8 +28,8 @@
 
         <provider
             android:exported="true"
-            android:authorities="com.example.owncontentprovider.data"
             android:name=".BookContentProvider"
+            android:authorities="com.example.owncontentprovider"
             android:grantUriPermissions="true"
             />
     </application>
