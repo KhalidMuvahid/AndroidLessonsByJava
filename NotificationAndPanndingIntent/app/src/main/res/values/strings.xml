@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NotificationAndPanndingIntent</string>
+    <string name="chanel_name">Channel name</string>
+    <string name="chanel_description">Channel Description</string>
+</resources>
